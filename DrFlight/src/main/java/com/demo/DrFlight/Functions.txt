@@ -1,0 +1,133 @@
+
+CREATE or replace FUNCTION  get_airline_by_username(_username text)
+returns TABLE("id" bigint ,name text, country_id int, user_id bigint)
+language plpgsql
+as
+$$
+BEGIN
+	RETURN QUERY
+	select airline_company.id, airline_company.name, airline_company.country_id, airline_company.user_id
+	from airline_company join users on airline_company.user_id = users.id
+	where users.username =_username;
+END;
+$$
+
+
+CREATE or replace FUNCTION  get_customer_by_username(_username text)
+returns TABLE("id" bigint ,first_name text,last_name text, address text,phone_no text,credit_card_no text, user_id bigint)
+language plpgsql
+as
+$$
+BEGIN
+	RETURN QUERY
+	select customers.id, customers.first_name, customers.last_name, customers.address, customers.phone_no, customers.credit_card_no, customers.user_id
+	from customers join users on customers.user_id = users.id
+	where users.username =_username;
+END;
+$$
+
+
+CREATE or replace FUNCTION  get_user_by_username(_username text)
+returns TABLE("id" bigint, username text, password text, email text, user_role int, thumbnail text)
+language plpgsql
+as
+$$
+BEGIN
+	RETURN QUERY
+	select * from users
+	where users.username =_username;
+END;
+$$
+
+
+CREATE or replace FUNCTION  get_flights_by_parameters(
+	_origin_country_id 		int = NULL,
+	_destination_country_id 	int = NULL,
+	_departure_date 		timestamp(0) without time zone = NULL,
+	_arrival_date 			timestamp(0) without time zone = NULL)
+returns TABLE("id" bigint, airline_company_id bigint, origin_country_id int, destination_country_id int, departure_time timestamp(0) without time zone, landing_time timestamp(0) without time zone, remaining_tickets int)
+language plpgsql
+as
+$$
+BEGIN
+	RETURN QUERY
+	SELECT * FROM flights
+	WHERE (_origin_country_id IS NULL OR flights.origin_country_id = _origin_country_id)
+	AND (_destination_country_id IS NULL OR flights.destination_country_id = _destination_country_id )
+	AND (_departure_date IS NULL OR flights.departure_time::date = _departure_date::date)
+	AND (_arrival_date IS NULL OR flights.arrival_time::date = _arrival_date::date);
+END;
+$$
+
+
+CREATE or replace FUNCTION  get_flights_by_airline_id(_airline_id bigint)
+returns TABLE("id" bigint, airline_company_id bigint, origin_country_id int, destination_country_id int, departure_time timestamp(0) without time zone, landing_time timestamp(0) without time zone, remaining_tickets int)
+language plpgsql
+as
+$$
+BEGIN
+	RETURN QUERY
+	select * from flights
+	where flights.airline_company_id = _airline_id;
+END;
+$$
+
+
+DROP FUNCTION get_arrival_flights(_country_id int);
+CREATE or replace FUNCTION  get_arrival_flights(_country_id int)
+returns TABLE("id" bigint, airline_company_id bigint, origin_country_id int, destination_country_id int, departure_time timestamp(0) without time zone, landing_time timestamp(0) without time zone, remaining_tickets int)
+language plpgsql
+as
+$$
+BEGIN
+	RETURN QUERY
+	select * from flights
+	where flights.destination_country_id = _country_id
+	and flights.landing_time > now()::timestamp
+	and flights.landing_time < now()::timestamp + interval '12 hour';
+END;
+$$
+
+
+CREATE or replace FUNCTION  get_departure_flights(_country_id int)
+returns TABLE("id" bigint, airline_company_id bigint, origin_country_id int, destination_country_id int, departure_time timestamp(0) without time zone, landing_time timestamp(0) without time zone, remaining_tickets int)
+language plpgsql
+as
+$$
+BEGIN
+	RETURN QUERY
+	select * from flights
+	where flights.origin_country_id = _country_id
+	and flights.departure_time > now()::timestamp
+	and flights.departure_time < now()::timestamp + interval '12 hour';
+END;
+$$
+
+
+CREATE or replace FUNCTION get_tickets_by_customer(_customer_id bigint)
+returns TABLE("id" bigint, flight_id bigint, customer_id bigint)
+language plpgsql
+as
+$$
+BEGIN
+	RETURN QUERY
+	select * from tickets
+	where tickets.costumer_id = _customer_id;
+END;
+$$
+
+
+CREATE or replace FUNCTION  get_airlines_by_parameters(
+	_country 	int = NULL,
+	_name 		text = NULL)
+returns TABLE("id" bigint, name text, country_id int, user_id bigint)
+language plpgsql
+as
+$$
+BEGIN
+	RETURN QUERY
+	SELECT * FROM airline_companies
+	WHERE 	(_country IS NULL OR airline_companies.country_id = _country)
+	AND 	(_name    IS NULL OR airline_companies.name = _name );
+END;
+$$
