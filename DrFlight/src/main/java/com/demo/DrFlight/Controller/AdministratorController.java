@@ -1,7 +1,6 @@
 package com.demo.DrFlight.Controller;
 
 import com.demo.DrFlight.Facade.AdministratorFacade;
-import com.demo.DrFlight.Facade.CustomerFacade;
 import com.demo.DrFlight.Misc.LoginToken;
 import com.demo.DrFlight.Poco.*;
 import org.springframework.web.bind.annotation.*;

@@ -1,9 +1,6 @@
 package com.demo.DrFlight.Misc;
 
 
-import org.springframework.core.io.ClassPathResource;
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -12,7 +9,7 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class Repository {
-    private Connection con = null;
+    private static Connection con = null;
     private Statement stm = null;
 
     /**
@@ -31,9 +28,10 @@ public class Repository {
             String url = prop.getProperty("DB_URL");
             String user = prop.getProperty("DB_USER");
             String password = prop.getProperty("DB_PASSWORD");
-
-            con = DriverManager.getConnection(url, user, password);
-            System.out.println("Connected to Postgress server.");
+            if(con == null) {
+                con = DriverManager.getConnection(url, user, password);
+                System.out.println("Connected to Postgress server.");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -10,13 +10,13 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class FlightDao implements Dao<Flight> {
 
     List<Flight> flights = new ArrayList<>();
     Repository sqlCon = new Repository();
     Connection con = sqlCon.getCon();
     Statement stm = sqlCon.getStm();
-
 
     @Override
     public Flight get(long id) {

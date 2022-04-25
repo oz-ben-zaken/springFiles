@@ -14,12 +14,12 @@ public class ContactUsController {
     @Autowired
     ContactUsService contactusService;
 
-    @GetMapping("/contactus")
+    @GetMapping("")
     public List<Contactus> getAllContactuss(){
         return contactusService.getAllContactuss();
     }
 
-    @GetMapping("/contactus/{id}")
+    @GetMapping("/{id}")
     public Contactus getContactus(@PathVariable int id){
         return contactusService.getContactus(id);
     }
@@ -29,7 +29,7 @@ public class ContactUsController {
         contactusService.addContactus(contactus);
     }
 
-    @DeleteMapping("/contactus/{id}")
+    @DeleteMapping("/{id}")
     public void deleteContactus(@PathVariable Contactus contactus){
         contactusService.deleteContactus(contactus);
     }

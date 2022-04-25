@@ -1,12 +1,9 @@
 package com.demo.DrFlight.Controller;
 
 import com.demo.DrFlight.Facade.AirlineFacade;
-import com.demo.DrFlight.Facade.CustomerFacade;
 import com.demo.DrFlight.Misc.LoginToken;
 import com.demo.DrFlight.Poco.AirlineCompany;
-import com.demo.DrFlight.Poco.Customer;
 import com.demo.DrFlight.Poco.Flight;
-import com.demo.DrFlight.Poco.Ticket;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

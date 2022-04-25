@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
+
     LoginToken token = new LoginToken(1, "1", 1);
     CustomerFacade customerFacade = new CustomerFacade(token);
 

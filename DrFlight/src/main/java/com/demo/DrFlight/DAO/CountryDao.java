@@ -41,7 +41,7 @@ public class CountryDao implements Dao<Country>{
             while (rs.next())
                 countries.add(new Country(
                         rs.getInt("id"),
-                        rs.getString("remaining_tickets"),
+                        rs.getString("name"),
                         rs.getString("flag")));
             rs.close();
         } catch (SQLException e) {
