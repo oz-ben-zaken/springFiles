@@ -2,6 +2,7 @@ package com.demo.DrFlight.DAO;
 
 import com.demo.DrFlight.Misc.Repository;
 import com.demo.DrFlight.Poco.Country;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,12 +10,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class CountryDao implements Dao<Country>{
 
     List<Country> countries = new ArrayList<>();
-    Repository sqlCon = new Repository();
-    Connection con = sqlCon.getCon();
-    Statement stm = sqlCon.getStm();
+
+    Connection con = Repository.getCon();
+    Statement stm = Repository.getStm();
 
     @Override
     public Country get(long id) {

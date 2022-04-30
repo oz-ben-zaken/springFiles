@@ -6,17 +6,27 @@ import com.demo.DrFlight.Poco.Administrator;
 import com.demo.DrFlight.Poco.AirlineCompany;
 import com.demo.DrFlight.Poco.Customer;
 import com.demo.DrFlight.Poco.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class AdministratorFacade extends AnonymousFacade {
-
-    protected AdministratorDao administratorDao = new AdministratorDao();
-    private final LoginToken loginToken;
+    @Autowired
+    protected AdministratorDao administratorDao;
+    @Autowired
+    private LoginToken loginToken;
 
     public AdministratorFacade(LoginToken loginToken) {
         this.loginToken = loginToken;
     }
+
+    /**
+     * Set the facade loginToken to token
+     * @param token
+     */
+    public void setToken(LoginToken token){this.loginToken = token;}
 
     /**
      * Gets token to authenticate admin.

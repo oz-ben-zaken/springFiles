@@ -3,7 +3,7 @@ package com.demo.DrFlight.Controller;
 import com.demo.DrFlight.Facade.AnonymousFacade;
 import com.demo.DrFlight.Facade.FacadeBase;
 import com.demo.DrFlight.Poco.*;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -12,13 +12,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/anonymous")
 public class AnonymousController {
-    AnonymousFacade anonymousFacade = new AnonymousFacade();
+
+    @Autowired
+    AnonymousFacade anonymousFacade;
 
     @GetMapping("/flight")
     public List<Flight> getAll(){
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getCredentials());
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString());
         return anonymousFacade.get_all_flights();
     }
 

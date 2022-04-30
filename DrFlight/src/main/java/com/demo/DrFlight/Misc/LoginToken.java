@@ -1,9 +1,15 @@
 package com.demo.DrFlight.Misc;
 
+import org.springframework.stereotype.Component;
+
+@Component
 public class LoginToken {
-    private final long id;
-    private final String name;
-    private final int role;
+    private long id;
+    private String name;
+    private int role;
+
+    public LoginToken() {
+    }
 
     public LoginToken(long id, String name, int role) {
         this.id = id;

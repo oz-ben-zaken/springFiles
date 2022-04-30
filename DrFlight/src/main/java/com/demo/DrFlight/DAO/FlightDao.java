@@ -2,6 +2,7 @@ package com.demo.DrFlight.DAO;
 
 import com.demo.DrFlight.Misc.Repository;
 import com.demo.DrFlight.Poco.Flight;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -10,13 +11,13 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Component
 public class FlightDao implements Dao<Flight> {
 
     List<Flight> flights = new ArrayList<>();
-    Repository sqlCon = new Repository();
-    Connection con = sqlCon.getCon();
-    Statement stm = sqlCon.getStm();
+
+    Connection con = Repository.getCon();
+    Statement stm = Repository.getStm();
 
     @Override
     public Flight get(long id) {

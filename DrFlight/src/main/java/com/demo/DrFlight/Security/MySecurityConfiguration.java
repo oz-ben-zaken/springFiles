@@ -32,6 +32,7 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http.authorizeHttpRequests()
                 .antMatchers("/admin/**").hasRole("administrator")
                 .antMatchers("/airline/**").hasRole("airline company")

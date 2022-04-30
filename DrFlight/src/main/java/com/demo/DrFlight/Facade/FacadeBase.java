@@ -1,23 +1,26 @@
 package com.demo.DrFlight.Facade;
 
-import com.demo.DrFlight.DAO.AirlineCompanyDao;
-import com.demo.DrFlight.DAO.CountryDao;
-import com.demo.DrFlight.DAO.FlightDao;
-import com.demo.DrFlight.DAO.UserDao;
-import com.demo.DrFlight.Poco.AirlineCompany;
-import com.demo.DrFlight.Poco.Country;
-import com.demo.DrFlight.Poco.Flight;
-import com.demo.DrFlight.Poco.User;
+import com.demo.DrFlight.DAO.*;
+import com.demo.DrFlight.Misc.LoginToken;
+import com.demo.DrFlight.Poco.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
 
+@Service
 public abstract class FacadeBase {
 
-    protected FlightDao flightDao = new FlightDao();
-    protected AirlineCompanyDao airlineCompanyDao = new AirlineCompanyDao();
-    protected CountryDao countryDao = new CountryDao();
-    protected UserDao userDao = new UserDao();
+    @Autowired
+    protected FlightDao flightDao;
+    @Autowired
+    protected AirlineCompanyDao airlineCompanyDao;
+    @Autowired
+    protected CountryDao countryDao;
+    @Autowired
+    protected UserDao userDao;
 
     /**
      * Calls to FlightDao.getAll().
@@ -127,5 +130,14 @@ public abstract class FacadeBase {
             if (!Character.isDigit(string.charAt(i)))
                 return true;
         return false;
+    }
+
+    /**
+     * @param username
+     * @return LoginToken with the information of username
+     */
+    public LoginToken getToken(String username){
+        User user = userDao.getUserByUsername(username);
+        return new LoginToken(user.id,username,user.userRole);
     }
 }

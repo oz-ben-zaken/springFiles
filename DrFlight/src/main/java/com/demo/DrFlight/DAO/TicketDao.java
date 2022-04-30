@@ -2,6 +2,7 @@ package com.demo.DrFlight.DAO;
 
 import com.demo.DrFlight.Misc.Repository;
 import com.demo.DrFlight.Poco.Ticket;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,18 +10,19 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class TicketDao implements Dao<Ticket>{
 
     List<Ticket> tickets = new ArrayList<>();
-    Repository sqlCon = new Repository();
-    Connection con = sqlCon.getCon();
-    Statement stm = sqlCon.getStm();
+
+    Connection con = Repository.getCon();
+    Statement stm = Repository.getStm();
 
     @Override
     public Ticket get(long id) {
         Ticket ticket=null;
         try {
-            var rs = stm.executeQuery("SELECT * FROM tickets WHERE tickets.id="+id);
+            var rs = stm.executeQuery("SELECT * FROM tickets WHERE tickets.user_id="+id);
             if (rs.next())
                 ticket = (new Ticket(
                         rs.getLong("id"),

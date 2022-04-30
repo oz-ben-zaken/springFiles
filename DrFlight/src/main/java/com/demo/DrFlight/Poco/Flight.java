@@ -1,7 +1,10 @@
 package com.demo.DrFlight.Poco;
 
+import lombok.Data;
+
 import java.sql.Timestamp;
 
+@Data
 public class Flight implements Poco {
     public long id;
     public long airlineCompanyId;
@@ -10,6 +13,8 @@ public class Flight implements Poco {
     public Timestamp departureTime;
     public Timestamp landingTime;
     public int remainingTickets;
+
+    public Flight() {}
 
     public Flight(long id, long airlineCompanyId, int originCountryId, int destinationCountryId, Timestamp departureTime, Timestamp landingTime, int remainingTickets) {
         this.id = id;

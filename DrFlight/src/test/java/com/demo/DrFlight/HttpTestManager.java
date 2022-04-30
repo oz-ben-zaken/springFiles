@@ -15,6 +15,7 @@ public class HttpTestManager<T> {
         HttpRequest request = HttpRequest
                 .newBuilder(URI.create(url))
                 .build();
+
         HttpResponse<String> response = null;
         try {
             response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -25,7 +26,6 @@ public class HttpTestManager<T> {
         GsonBuilder builder = new GsonBuilder();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
-
         return gson.fromJson(response.body(), tclass);
     }
 }

@@ -1,6 +1,8 @@
 package com.demo.DrFlight.Misc;
 
 
+import org.springframework.stereotype.Component;
+
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -10,13 +12,13 @@ import java.util.Properties;
 
 public class Repository {
     private static Connection con = null;
-    private Statement stm = null;
+    private static Statement stm = null;
 
     /**
      * Try to open connection to the database specified in the config file.
      * Returns (Connection) connection if opened successfully or null if not.
      */
-    public Connection getCon() {
+    public static Connection getCon() {
         try {
 
             Class.forName("org.postgresql.Driver");
@@ -35,16 +37,16 @@ public class Repository {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return this.con;
+        return con;
     }
 
     /**
      * Try to create statement to the connection we have.
      * Returns (Statement) statement if created successfully or null if not.
      */
-    public Statement getStm() {
+    public static Statement getStm() {
         try {
-            stm = this.con.createStatement();
+            stm = con.createStatement();
         } catch (SQLException e) {
             e.printStackTrace();
         }

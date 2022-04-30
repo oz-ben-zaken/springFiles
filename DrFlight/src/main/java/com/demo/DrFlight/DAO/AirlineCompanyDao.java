@@ -2,6 +2,7 @@ package com.demo.DrFlight.DAO;
 
 import com.demo.DrFlight.Misc.Repository;
 import com.demo.DrFlight.Poco.AirlineCompany;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,18 +10,40 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class AirlineCompanyDao implements Dao<AirlineCompany> {
 
     List<AirlineCompany> airlineCompanies = new ArrayList<>();
-    Repository sqlCon = new Repository();
-    Connection con = sqlCon.getCon();
-    Statement stm = sqlCon.getStm();
+
+    Connection con = Repository.getCon();
+    Statement stm = Repository.getStm();
 
     @Override
     public AirlineCompany get(long id) {
         AirlineCompany airline = null;
         try {
             var rs = stm.executeQuery("SELECT * FROM airline_companies where airline_companies.id =" + id);
+            if (rs.next())
+                airline = new AirlineCompany(
+                        rs.getLong("id"),
+                        rs.getString("name"),
+                        rs.getInt("country_id"),
+                        rs.getLong("user_id"));
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return airline;
+    }
+
+    /**
+     * @param userId
+     * @return AirlineCompany with matching userId from "airline_companies" table in the database
+     */
+    public AirlineCompany getByUserId(long userId) {
+        AirlineCompany airline = null;
+        try {
+            var rs = stm.executeQuery("SELECT * FROM airline_companies where airline_companies.user_id =" + userId);
             if (rs.next())
                 airline = new AirlineCompany(
                         rs.getLong("id"),

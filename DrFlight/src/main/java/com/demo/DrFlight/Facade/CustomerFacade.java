@@ -4,17 +4,28 @@ import com.demo.DrFlight.DAO.TicketDao;
 import com.demo.DrFlight.Misc.LoginToken;
 import com.demo.DrFlight.Poco.Customer;
 import com.demo.DrFlight.Poco.Ticket;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CustomerFacade extends AnonymousFacade {
 
-    protected TicketDao ticketDao = new TicketDao();
-    private final LoginToken loginToken;
+    @Autowired
+    protected TicketDao ticketDao;
+
+    private LoginToken loginToken;
 
     public CustomerFacade(LoginToken loginToken) {
         this.loginToken = loginToken;
     }
+
+    /**
+     * Set the facade loginToken to token
+     * @param token
+     */
+    public void setToken(LoginToken token){this.loginToken = token;}
 
     /**
      * Gets token to authenticate Customer.
@@ -26,10 +37,6 @@ public class CustomerFacade extends AnonymousFacade {
     public boolean update_customer(Customer customer, LoginToken loginToken) {
         if (!this.loginToken.toString().equals(loginToken.toString())) {
             printAuthenticationError();
-            return false;
-        }
-        if (loginToken.GetId() != customer.id) {
-            System.out.println("Access denied! You can't change a different user info.");
             return false;
         }
         if (isNotNumeric(customer.phoneNumber) || isNotNumeric(customer.creditCardNumber)) {
@@ -51,10 +58,6 @@ public class CustomerFacade extends AnonymousFacade {
             printAuthenticationError();
             return false;
         }
-        if (loginToken.GetId() != ticket.customerId) {
-            System.out.println("Access denied! You can't add ticket to a different user.");
-            return false;
-        }
         if (this.flightDao.decreaseFlightRemainingTickets(ticket.flightId)) {
             return this.ticketDao.add(ticket);
         }
@@ -73,10 +76,6 @@ public class CustomerFacade extends AnonymousFacade {
             printAuthenticationError();
             return false;
         }
-        if (loginToken.GetId() != ticket.customerId) {
-            System.out.println("Access denied! You can't remove ticket from a different user.");
-            return false;
-        }
         this.flightDao.increaseFlightRemainingTickets(ticket.flightId);
         return this.ticketDao.remove(ticket);
     }
@@ -91,6 +90,7 @@ public class CustomerFacade extends AnonymousFacade {
             printAuthenticationError();
             return null;
         }
-        return this.ticketDao.getTicketsByCustomer(this.loginToken.GetId());
+        Customer customer = this.customerDao.getByUserId(this.loginToken.GetId());
+        return this.ticketDao.getTicketsByCustomer(customer.id);
     }
 }

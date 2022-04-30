@@ -8,7 +8,8 @@ public class User implements Poco {
     public String password;
     public String email;
     public int userRole;
-    public String imgUrl= "src\\main\\resources\\UserImg\\def_user.png";
+    public String imgUrl = "src\\main\\resources\\UserImg\\def_user.png";
+
 
     public User(long id, String username, String password, String email, int userRole, String name) {
         this.id = id;
@@ -16,8 +17,8 @@ public class User implements Poco {
         this.password = password;
         this.email = email;
         this.userRole = userRole;
-        if(!name.isEmpty()){
-            String url= "src\\main\\resources\\UserImg\\"+name;
+        if (name != null){
+            String url = "src\\main\\resources\\UserImg\\" + name;
             File file = new File(url);
             if (file.exists())
                 this.imgUrl = url;

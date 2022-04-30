@@ -2,6 +2,7 @@ package com.demo.DrFlight.DAO;
 
 import com.demo.DrFlight.Misc.Repository;
 import com.demo.DrFlight.Poco.Customer;
+import org.springframework.stereotype.Component;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,18 +10,43 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class CustomerDao implements Dao<Customer> {
 
     List<Customer> customers = new ArrayList<>();
-    Repository sqlCon = new Repository();
-    Connection con = sqlCon.getCon();
-    Statement stm = sqlCon.getStm();
+
+    Connection con = Repository.getCon();
+    Statement stm = Repository.getStm();
 
     @Override
     public Customer get(long id) {
         Customer customer = null;
         try {
             var rs = stm.executeQuery("SELECT * FROM customers WHERE customers.id=" + id);
+            if (rs.next())
+                customer = new Customer(
+                        rs.getLong("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("address"),
+                        rs.getString("phone_no"),
+                        rs.getString("credit_card_no"),
+                        rs.getLong("user_id"));
+            rs.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customer;
+    }
+
+    /**
+     * @param userId
+     * @return Customer with matching userId from "customers" table in the database
+     */
+    public Customer getByUserId(long userId) {
+        Customer customer = null;
+        try {
+            var rs = stm.executeQuery("SELECT * FROM customers WHERE customers.user_id=" + userId);
             if (rs.next())
                 customer = new Customer(
                         rs.getLong("id"),

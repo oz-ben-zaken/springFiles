@@ -4,10 +4,14 @@ import com.demo.DrFlight.DAO.CustomerDao;
 import com.demo.DrFlight.Misc.LoginToken;
 import com.demo.DrFlight.Poco.Customer;
 import com.demo.DrFlight.Poco.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AnonymousFacade extends FacadeBase {
 
-    protected CustomerDao customerDao = new CustomerDao();
+    @Autowired
+    protected CustomerDao customerDao;
 
     /**
      * Gets a User by username from userDao.getUserByUsername(username).
@@ -18,7 +22,6 @@ public class AnonymousFacade extends FacadeBase {
      * @return return the facade we created or the original faced if user don't exist..
      */
     public FacadeBase Login(String username, String password) {
-
         User user = this.userDao.getUserByUsername(username);
         if (user == null) {
             System.out.println("Username does not exist.");
@@ -29,11 +32,6 @@ public class AnonymousFacade extends FacadeBase {
             return this;
         }
         LoginToken loginToken = new LoginToken(user.id,user.username, user.userRole);
-        this.customerDao.close();
-        this.userDao.close();
-        this.airlineCompanyDao.close();
-        this.flightDao.close();
-        this.countryDao.close();
         return switch (user.userRole) {
             case 1 -> new CustomerFacade(loginToken);
             case 2 -> new AirlineFacade(loginToken);
